@@ -17,16 +17,15 @@
 package com.db.hack.SpringCloudVisionApiDemo;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.WritableResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +33,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.db.hack.entity.Customer;
+import com.db.hack.repository.CustomerRepository;
+import com.google.gson.Gson;
 
 /**
  * A REST Controller that exposes read and write operations on a Google Cloud Storage file
@@ -50,12 +53,15 @@ public class WebController {
 	private Resource gcsFile;
 	
 	private final JdbcTemplate jdbcTemplate;
+	private final CustomerRepository repository;
 
-	public WebController(JdbcTemplate jdbcTemplate) {
+	@Autowired
+	public WebController(JdbcTemplate jdbcTemplate,CustomerRepository repository) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.repository = repository;
 	}
 
-	@GetMapping("/getCustomers")
+	@GetMapping("/customers")
 	public List<String> getCustomers() {
 		return this.jdbcTemplate.queryForList("SELECT * FROM Customer").stream()
 				.map((m) -> m.values().toString())
@@ -71,13 +77,13 @@ public class WebController {
 				Charset.defaultCharset()) + "\n";
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
-	String writeGcs(@RequestBody String data) throws IOException {
-		logger.log(Level.INFO, "writing to bucket");
-		try (OutputStream os = ((WritableResource) this.gcsFile).getOutputStream()) {
-			os.write(data.getBytes());
-		}
-		return "file was updated\n";
+	@RequestMapping(value = "/customers", method = RequestMethod.POST)
+	String saveCustomer(@RequestBody String data) throws IOException {
+		logger.log(Level.INFO, "saving customer data");
+		Gson gson = new Gson();
+		Customer cust = gson.fromJson(data, Customer.class);
+		repository.save(cust);
+		return "Customer data saved successfully\n";
 	}
 	
 }

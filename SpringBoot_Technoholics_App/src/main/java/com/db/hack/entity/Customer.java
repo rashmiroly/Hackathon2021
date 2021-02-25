@@ -12,7 +12,10 @@ public class Customer {
 	private @Id @GeneratedValue Long id;
 	private String firstName;
 	private String lastName;
-	private String description;
+	private String email;
+	private String phone;
+	private String adhar;
+	private String pan;
 
 	public Customer(String firstName, String lastName) {
 		this.firstName = firstName;
@@ -27,13 +30,13 @@ public class Customer {
 		return Objects.equals(id, customer.id) &&
 			Objects.equals(firstName, customer.firstName) &&
 			Objects.equals(lastName, customer.lastName) &&
-			Objects.equals(description, customer.description);
+			Objects.equals(adhar, customer.adhar);
 	}
 
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(id, firstName, lastName, description);
+		return Objects.hash(id, firstName, lastName, adhar);
 	}
 
 	public Long getId() {
@@ -60,21 +63,45 @@ public class Customer {
 		this.lastName = lastName;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAdhar() {
+		return adhar;
+	}
+
+	public void setAdhar(String adhar) {
+		this.adhar = adhar;
+	}
+
+	public String getPan() {
+		return pan;
+	}
+
+	public void setPan(String pan) {
+		this.pan = pan;
 	}
 
 	@Override
 	public String toString() {
-		return "Employee{" +
+		return "Customer{" +
 			"id=" + id +
 			", firstName='" + firstName + '\'' +
 			", lastName='" + lastName + '\'' +
-			", description='" + description + '\'' +
+			", Email='" + email + '\'' +
 			'}';
 	}
 }

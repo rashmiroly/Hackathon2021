@@ -25,7 +25,7 @@ public class SpringCloudVisionApiDemoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner houses(CustomerRepository custRepository) {
+	public CommandLineRunner customer(CustomerRepository custRepository) {
 		return (args) -> {
 			custRepository.deleteAll();
 
