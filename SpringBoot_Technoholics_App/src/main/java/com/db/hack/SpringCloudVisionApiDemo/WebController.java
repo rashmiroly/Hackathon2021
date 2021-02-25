@@ -55,7 +55,6 @@ public class WebController {
 	private final JdbcTemplate jdbcTemplate;
 	private final CustomerRepository repository;
 
-	@Autowired
 	public WebController(JdbcTemplate jdbcTemplate,CustomerRepository repository) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.repository = repository;
