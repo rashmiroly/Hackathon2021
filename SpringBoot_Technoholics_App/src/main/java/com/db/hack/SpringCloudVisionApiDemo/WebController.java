@@ -19,13 +19,17 @@ package com.db.hack.SpringCloudVisionApiDemo;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,7 +48,21 @@ public class WebController {
 
 	@Value("gs://${gcs-resource-test-bucket}/my-file.txt")
 	private Resource gcsFile;
-	    
+	
+	private final JdbcTemplate jdbcTemplate;
+
+	public WebController(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	@GetMapping("/getCustomers")
+	public List<String> getCustomers() {
+		return this.jdbcTemplate.queryForList("SELECT * FROM Customer").stream()
+				.map((m) -> m.values().toString())
+				.collect(Collectors.toList());
+	}
+	
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String readGcsFile() throws IOException {
 		logger.log(Level.INFO, "reading file from bucket");
