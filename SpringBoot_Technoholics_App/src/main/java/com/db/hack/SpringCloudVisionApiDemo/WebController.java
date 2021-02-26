@@ -53,11 +53,12 @@ public class WebController {
 	private Resource gcsFile;
 	
 	private final JdbcTemplate jdbcTemplate;
-	private final CustomerRepository repository;
+	@Autowired
+	private final CustomerRepository customerRepository;
 
 	public WebController(JdbcTemplate jdbcTemplate,CustomerRepository repository) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.repository = repository;
+		this.customerRepository = repository;
 	}
 
 	@GetMapping("/customers")
@@ -81,7 +82,7 @@ public class WebController {
 		logger.log(Level.INFO, "saving customer data");
 		Gson gson = new Gson();
 		Customer cust = gson.fromJson(data, Customer.class);
-		repository.save(cust);
+		customerRepository.save(cust);
 		return "Customer data saved successfully\n";
 	}
 	
