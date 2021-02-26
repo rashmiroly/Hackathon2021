@@ -53,12 +53,12 @@ public class WebController {
 	private Resource gcsFile;
 	
 	private final JdbcTemplate jdbcTemplate;
-	@Autowired
-	private final CustomerRepository customerRepository;
+	//@Autowired
+	//private final CustomerRepository customerRepository;
 
-	public WebController(JdbcTemplate jdbcTemplate,CustomerRepository repository) {
+	public WebController(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-		this.customerRepository = repository;
+		//this.customerRepository = repository;
 	}
 
 	@GetMapping("/customers")
@@ -80,9 +80,10 @@ public class WebController {
 	@RequestMapping(value = "/customers", method = RequestMethod.POST)
 	String saveCustomer(@RequestBody String data) throws IOException {
 		logger.log(Level.INFO, "saving customer data");
-		Gson gson = new Gson();
-		Customer cust = gson.fromJson(data, Customer.class);
-		customerRepository.save(cust);
+		/*
+		 * Gson gson = new Gson(); Customer cust = gson.fromJson(data, Customer.class);
+		 */
+		//customerRepository.save(cust);
 		return "Customer data saved successfully\n";
 	}
 	

@@ -24,18 +24,15 @@ public class SpringCloudVisionApiDemoApplication {
 		
 	}
 
-	@Bean
-	public CommandLineRunner customer(CustomerRepository custRepository) {
-		return (args) -> {
-			custRepository.deleteAll();
-
-			Stream.of(new Customer("Test1","user"),
-					new Customer("Test2","user"),
-					new Customer("Test3","user"))
-					.forEach(custRepository::save);
-
-			LOGGER.info("Number of customer is " + custRepository.count());
-			custRepository.findAll().forEach((cust) -> LOGGER.info(cust.getFirstName()));
-		};
-	}
+	/*
+	 * @Bean public CommandLineRunner customer(CustomerRepository custRepository) {
+	 * return (args) -> { custRepository.deleteAll();
+	 * 
+	 * Stream.of(new Customer("Test1","user"), new Customer("Test2","user"), new
+	 * Customer("Test3","user")) .forEach(custRepository::save);
+	 * 
+	 * LOGGER.info("Number of customer is " + custRepository.count());
+	 * custRepository.findAll().forEach((cust) -> LOGGER.info(cust.getFirstName()));
+	 * }; }
+	 */
 }
